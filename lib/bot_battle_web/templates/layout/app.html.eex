@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+    <title>BotBattle · Artificial Future</title>
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <%# tree %>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Holtwood+One+SC' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script|Herr+Von+Muellerhoff' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Istok+Web|Roboto+Condensed:700' rel='stylesheet' type='text/css'>
+  </head>
+  <header class="hero">
+    <div class="hero-wrap">
+      <p class="intro" id="intro">Artificial</p>
+      <h1 id="headline">Coding Tournament</h1>
+      <p class="year"><i class="fa fa-star"></i> 2018 <i class="fa fa-star"></i></p>
+      <p>Entertainment Of The Future</p>
+    </div>
+  </header>
+
+  <body class="main-body">
+    <%= render @view_module, @view_template, assigns %>
+    <script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
+  </body>
+
+  <section class="share">
+    <div class="share-wrap">
+        <a class="share-icon" href="https://twitter.com/basement47"><i class="fa fa-twitter"></i></a>
+        <a class="share-icon" href="#"><i class="fa fa-facebook"></i></a>
+        <a class="share-icon" href="#"><i class="fa fa-envelope"></i></a>
+    </div>
+  </section>
+</html>
