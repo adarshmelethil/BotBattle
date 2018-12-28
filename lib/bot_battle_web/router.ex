@@ -26,7 +26,6 @@ defmodule BotBattleWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    get "/tree", BracketController, :tree 
   end
 
   # Other scopes may use custom stacks.
