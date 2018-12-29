@@ -11,15 +11,7 @@ defmodule BotBattleWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
-  end
-
-  if Mix.env() == :dev do
-    forward(
-      "/graphiql",
-      Absinthe.Plug.GraphiQL,
-      schema: FsTodoWeb.Schema,
-      json_codec: Jason
-    )
+    plug BotBattleWeb.Plugs.Context
   end
 
   scope "/", BotBattleWeb do
@@ -29,7 +21,21 @@ defmodule BotBattleWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", BotBattleWeb do
-  #   pipe_through :api
-  # end
+  scope "/api" do
+    pipe_through :api
+
+    forward(
+      "/graphql",
+      Absinthe.Plug,
+      schema: BotBattleWeb.Schema,
+      json_codec: Jason)
+
+    if Mix.env() == :dev do
+      forward(
+        "/graphiql",
+        Absinthe.Plug.GraphiQL,
+        schema: BotBattleWeb.Schema,
+        json_codec: Jason)
+    end
+  end
 end
