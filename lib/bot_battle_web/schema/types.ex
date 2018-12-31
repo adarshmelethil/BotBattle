@@ -3,6 +3,7 @@ defmodule BotBattleWeb.Schema.Types do
 
   alias BotBattleWeb.Schema.Types
 
-  import_types(Types.UserType)
-  import_types(Types.SessionType)
+  import_types Types.UserType
+  import_types Types.SessionType
+  import_types Types.TourneyType
 end

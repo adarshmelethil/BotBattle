@@ -25,6 +25,19 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Guardian config details, `mix guardian.gen.secret`
+config :bot_battle, BotBattle.Guardian,
+       issuer: "BotBattle",
+       secret_key: "yJ9mvHKaRNvMlBXxfptsBixwQu5vGVJ3gk/ioIb3WV4w5dWTC0H2b4+9Ia8HKh6N"
+
+# config :money,
+#   default_currency: :USD,
+#   separator: ",",
+#   delimeter: ".",
+#   symbol: true,
+#   symbol_on_right: false,
+#   symbol_space: false
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
