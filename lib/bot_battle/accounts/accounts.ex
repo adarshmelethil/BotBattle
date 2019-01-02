@@ -35,10 +35,15 @@ defmodule BotBattle.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
-
-  def get_user(id), do: Repo.get(User, id)
-  
+  def get_user!(id) when is_integer(id), do: Repo.get!(User, id)
+  def get_user(id) when is_integer(id), do: Repo.get(User, id)
+  def get_user(email) do
+    # number as a string, so treat it as an id
+    case Integer.parse(email) do
+      {id, _} -> get_user(id)
+      :error -> Repo.all(from u in User, where: u.email == ^email)
+    end
+  end
   @doc """
   Creates a user.
 

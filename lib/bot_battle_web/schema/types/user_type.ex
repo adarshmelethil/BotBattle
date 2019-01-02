@@ -5,11 +5,11 @@ defmodule BotBattleWeb.Schema.Types.UserType do
 
   # Return values for user list
   object :user_type do 
-    field(:id, :id)
-    field(:first_name, :string)
-    field(:last_name, :string)
-    field(:email, :string)
-    field(:role, :string)
+    field :id, :id
+    field :first_name, :string
+    field :last_name, :string
+    field :email, :string
+    field :role, :string
 
     field :hosted_tourneys, list_of(:tourney_type) do
       resolve &Resolvers.TourneyResolver.tourneys/3

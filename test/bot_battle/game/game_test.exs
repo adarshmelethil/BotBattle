@@ -69,4 +69,124 @@ defmodule BotBattle.GameTest do
       assert %Ecto.Changeset{} = Game.change_tourney(tourney)
     end
   end
+
+  describe "registrations" do
+    alias BotBattle.Game.Registration
+
+    @valid_attrs %{paid: 42, registration_datetime: "2010-04-17T14:00:00Z"}
+    @update_attrs %{paid: 43, registration_datetime: "2011-05-18T15:01:01Z"}
+    @invalid_attrs %{paid: nil, registration_datetime: nil}
+
+    def registration_fixture(attrs \\ %{}) do
+      {:ok, registration} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Game.create_registration()
+
+      registration
+    end
+
+    test "list_registrations/0 returns all registrations" do
+      registration = registration_fixture()
+      assert Game.list_registrations() == [registration]
+    end
+
+    test "get_registration!/1 returns the registration with given id" do
+      registration = registration_fixture()
+      assert Game.get_registration!(registration.id) == registration
+    end
+
+    test "create_registration/1 with valid data creates a registration" do
+      assert {:ok, %Registration{} = registration} = Game.create_registration(@valid_attrs)
+      assert registration.paid == 42
+      assert registration.registration_datetime == DateTime.from_naive!(~N[2010-04-17T14:00:00Z], "Etc/UTC")
+    end
+
+    test "create_registration/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Game.create_registration(@invalid_attrs)
+    end
+
+    test "update_registration/2 with valid data updates the registration" do
+      registration = registration_fixture()
+      assert {:ok, %Registration{} = registration} = Game.update_registration(registration, @update_attrs)
+      assert registration.paid == 43
+      assert registration.registration_datetime == DateTime.from_naive!(~N[2011-05-18T15:01:01Z], "Etc/UTC")
+    end
+
+    test "update_registration/2 with invalid data returns error changeset" do
+      registration = registration_fixture()
+      assert {:error, %Ecto.Changeset{}} = Game.update_registration(registration, @invalid_attrs)
+      assert registration == Game.get_registration!(registration.id)
+    end
+
+    test "delete_registration/1 deletes the registration" do
+      registration = registration_fixture()
+      assert {:ok, %Registration{}} = Game.delete_registration(registration)
+      assert_raise Ecto.NoResultsError, fn -> Game.get_registration!(registration.id) end
+    end
+
+    test "change_registration/1 returns a registration changeset" do
+      registration = registration_fixture()
+      assert %Ecto.Changeset{} = Game.change_registration(registration)
+    end
+  end
+
+  describe "matchs" do
+    alias BotBattle.Game.Match
+
+    @valid_attrs %{round: 42}
+    @update_attrs %{round: 43}
+    @invalid_attrs %{round: nil}
+
+    def match_fixture(attrs \\ %{}) do
+      {:ok, match} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Game.create_match()
+
+      match
+    end
+
+    test "list_matchs/0 returns all matchs" do
+      match = match_fixture()
+      assert Game.list_matchs() == [match]
+    end
+
+    test "get_match!/1 returns the match with given id" do
+      match = match_fixture()
+      assert Game.get_match!(match.id) == match
+    end
+
+    test "create_match/1 with valid data creates a match" do
+      assert {:ok, %Match{} = match} = Game.create_match(@valid_attrs)
+      assert match.round == 42
+    end
+
+    test "create_match/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Game.create_match(@invalid_attrs)
+    end
+
+    test "update_match/2 with valid data updates the match" do
+      match = match_fixture()
+      assert {:ok, %Match{} = match} = Game.update_match(match, @update_attrs)
+      assert match.round == 43
+    end
+
+    test "update_match/2 with invalid data returns error changeset" do
+      match = match_fixture()
+      assert {:error, %Ecto.Changeset{}} = Game.update_match(match, @invalid_attrs)
+      assert match == Game.get_match!(match.id)
+    end
+
+    test "delete_match/1 deletes the match" do
+      match = match_fixture()
+      assert {:ok, %Match{}} = Game.delete_match(match)
+      assert_raise Ecto.NoResultsError, fn -> Game.get_match!(match.id) end
+    end
+
+    test "change_match/1 returns a match changeset" do
+      match = match_fixture()
+      assert %Ecto.Changeset{} = Game.change_match(match)
+    end
+  end
 end

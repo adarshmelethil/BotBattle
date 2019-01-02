@@ -25,6 +25,17 @@ defmodule BotBattleWeb.Schema do
     field :tourneys, list_of(:tourney_type) do
       resolve &Resolvers.TourneyResolver.tourneys/3
     end
+
+    @desc "Get all registrations"
+    field :registrations, list_of(:registration_type) do
+      resolve &Resolvers.RegistrationResolver.registrations/3
+    end
+
+    @desc "Get all matchs"
+    field :matchs, list_of(:match_type) do
+      arg :tourney_id, :id
+      resolve &Resolvers.MatchResolver.find_matchs/3
+    end
   end
 
   mutation do
@@ -42,11 +53,31 @@ defmodule BotBattleWeb.Schema do
 
     @desc "Create a Tourney"
     field :create_tourney, type: :tourney_type do 
-      arg(:input, non_null(:tourney_input_type))
+      arg :input, non_null(:tourney_input_type)
       middleware Middleware.Authorize, "admin"
-      resolve &Resolvers.TourneyResolver.create_tourney/3
+      resolve &Resolvers.RegistrationResolver.admin_register/3
     end
 
+    @desc "Register to tourney"
+    field :self_register_tourney, type: :registration_type do
+      arg :input, non_null(:player_registration_input_type)
+      middleware Middleware.Authorize, :any
+      resolve &Resolvers.RegistrationResolver.self_register/3
+    end
+
+    @desc "Admin register user to tourney"
+    field :admin_register_tourney, type: :registration_type do
+      arg :input, non_null(:admin_registration_input_type)
+      middleware Middleware.Authorize, "admin"
+      resolve &Resolvers.RegistrationResolver.admin_register/3
+    end
+
+    @desc "Manually trigger tourney match setup"
+    field :setup_matchs, type: list_of(:match_type) do 
+      arg :tourney_id, non_null(:id)
+      middleware Middleware.Authorize, "admin"
+      resolve &Resolvers.TourneyResolver.create_matchs/3
+    end
   end
 
   # subscription do

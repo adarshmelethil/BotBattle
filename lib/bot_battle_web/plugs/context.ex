@@ -16,7 +16,8 @@ defmodule BotBattleWeb.Plugs.Context do
         {:ok, user} <- BotBattle.Guardian.resource_from_claims(claims) do
       %{current_user: user}
     else
-      _ -> %{}
+      err -> 
+        %{}
     end
   end
 end

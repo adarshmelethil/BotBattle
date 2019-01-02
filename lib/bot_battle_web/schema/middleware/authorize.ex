@@ -3,8 +3,8 @@ defmodule BotBattleWeb.Schema.Middleware.Authorize do
 
   def call(resolution, role) do
     with %{current_user: current_user} <- resolution.context,
-        true <- correct_role?(current_user, role) do
-      resolution
+      true <- correct_role?(current_user, role) do
+        resolution
     else
       _ -> 
         resolution 
@@ -15,5 +15,5 @@ defmodule BotBattleWeb.Schema.Middleware.Authorize do
   defp correct_role?(%{role: "root"}, _role), do: true
   defp correct_role?(%{}, :any), do: true
   defp correct_role?(%{role: role}, role), do: true
-  defp correct_role?(_, _), do: false
+  defp correct_role?(_user, _valid_role), do: false
 end
