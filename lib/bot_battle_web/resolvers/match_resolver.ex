@@ -1,7 +1,6 @@
 defmodule BotBattleWeb.Resolvers.MatchResolver do
 
   alias BotBattle.Game
-
   
   def find_matchs(_parent, %{tourney_id: tourney_id}, _resolution) do
     case Game.list_matchs(tourney_id) do

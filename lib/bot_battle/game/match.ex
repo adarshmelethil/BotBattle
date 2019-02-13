@@ -20,7 +20,21 @@ defmodule BotBattle.Game.Match do
   @doc false
   def changeset(match, attrs) do
     match
-    |> cast(attrs, [:round])
-    |> validate_required([:round])
+    |> cast(attrs, [:round, :player1_id, :player2_id, :tourney_id])
+    |> validate_required([:round, :player1_id, :player2_id, :tourney_id])
+    |> diff_players
+  end
+
+  def diff_players(%Ecto.Changeset{
+    errors: errors,
+    changes: %{
+      player1_id: player1_id,
+      player2_id: player2_id}}=changeset) do
+    
+    if player1_id == player2_id do
+      %{changeset | errors: [duplicate_player: "Match can't be against yourself"] ++ errors, valid?: false}
+    else
+      changeset
+    end
   end
 end

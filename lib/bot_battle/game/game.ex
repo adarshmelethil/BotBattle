@@ -213,7 +213,7 @@ defmodule BotBattle.Game do
 
   """
   def list_matchs, do: Repo.all(Match)
-  def list_matchs(tourney_id), do: Repo.all(from m in Match, where: m.tourney_id > ^tourney_id)
+  def list_matchs(tourney_id), do: Repo.all(from m in Match, where: m.tourney_id == ^tourney_id)
 
   @doc """
   Gets a single match.

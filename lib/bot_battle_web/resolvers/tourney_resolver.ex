@@ -3,31 +3,63 @@ defmodule BotBattleWeb.Resolvers.TourneyResolver do
   alias BotBattle.{Game, Accounts}
 
   def create_matchs(_parent, %{tourney_id: tourney_id}, _resolution) do
-    case Game.list_registrations(tourney_id) do
-      nil -> {:error, :registrations_not_found}
-      registrations ->
-        IO.puts("registrations - #{tourney_id}:")
-        registrations
-        |> IO.inspect
+    case Game.list_matchs(tourney_id) do
+      nil -> 
+        # {:error, "User ID #{registration.player_id} not found"}
         {:ok, nil}
+      [] ->
+        case Game.list_registrations(tourney_id) do
+          nil -> {:error, :registrations_not_found}
+          registrations ->
+            if [] == registrations do
+              {:error, "No registrations for tourney"}
+            else
+              registrations
+              |> generate_round_one([])
+              |> Enum.each(fn match -> Game.create_match(match) end)
+
+              case Game.list_matchs(tourney_id) do
+                nil -> 
+                  {:error, "Failed to create matchs for tourney_id: #{tourney_id}"}
+                [] ->
+                  {:error, "Failed to create matchs for tourney_id: #{tourney_id}"}
+                matchs ->
+                  {:ok, matchs}
+              end
+            end
+        end
+      matchs ->
+        {:ok, matchs}
     end
   end
 
-  def gen_matchs([player_head|player_tail], []), do: gen_matchs(player_tail, [%{p1: player_head}])
-  def gen_matchs([], [match_head|match_tail]=matchs) do
-    case Map.fetch(match_head, :p2) do
+  # Start
+  def generate_round_one([%{player_id: player_id, tourney_id: tourney_id}|player_tail], []) do
+    generate_round_one(player_tail, [%{
+      round: 1,
+      player1_id: player_id,
+      tourney_id: tourney_id
+    }])
+  end
+  # End
+  def generate_round_one([], [match_head|match_tail]=matchs) do
+    case Map.fetch(match_head, :player2_id) do
       :error ->
-        [Map.put_new(match_head, :p2, nil)|match_tail]
+        [Map.put_new(match_head, :player2_id, nil)|match_tail]
       {:ok, _} ->
         matchs
     end
   end
-  def gen_matchs([player_head|player_tail], [match_head|match_tail]=matchs) do
-    case Map.fetch(match_head, :p2) do
+  def generate_round_one([%{player_id: player_id, tourney_id: tourney_id}|player_tail], [match_head|match_tail]=matchs) do
+    case Map.fetch(match_head, :player2_id) do
       :error ->
-        gen_matchs(player_tail, [Map.put_new(match_head, :p2, player_head)|match_tail])
+        generate_round_one(player_tail, [Map.put_new(match_head, :player2_id, player_id)|match_tail])
       {:ok, _} ->
-        gen_matchs(player_tail, [%{p1: player_head}|matchs])
+        generate_round_one(player_tail, [%{
+          round: 1,
+          player1_id: player_id,
+          tourney_id: tourney_id
+        }|matchs])
     end
   end
 

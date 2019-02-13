@@ -2,7 +2,7 @@
 <div id="elm-main">
 </div>
 
-<section id="bracket" class="bg-grey-lighter">
+<%# <section id="bracket" class="bg-grey-lighter">
     <div class="container">
         <div class="split split-one">
             <div class="round round-one current">
@@ -171,4 +171,4 @@
             </div>  <!-- END ROUND ONE -->                          
         </div>
     </div>
-</section>
+</section> %>
